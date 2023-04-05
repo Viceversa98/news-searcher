@@ -1,52 +1,33 @@
 import React from "react";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderOutlined";
 import { styled } from "@mui/material/styles";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { useState } from "react";
-
-function generate(element) {
-  return [0, 1, 2, 3].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
-
+import { useNewsCrud } from "../../context/NewsCRUDContext";
+import { List, ListItem, ListItemText } from "@mui/material";
 const Div = styled("div")(({ theme }) => ({
   ...theme.typography.button,
   backgroundColor: theme.palette.background.paper,
   padding: theme.spacing(0),
 }));
 
-const Demo = styled("div")(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-}));
+
 
 const FavouritePage = () => {
-  const [dense, setDense] = useState(false);
-  const [secondary, setSecondary] = useState(false);
+  const fromdb =['apple', 'banana', 'orange'];
+  const renderFaveList = fromdb.map((fave) => {
+    return (
+      <ListItem>
+        <ListItemText primary={fave} key={fave}/> <StarBorderPurple500Icon/>
+      </ListItem>
+    );
+  });
+
 
   return (
     <>
-      <Div>Favourite    Page</Div>
-      <Demo>
-        <List dense={dense}>
-          {generate(
-            <ListItem>
-              <ListItemText
-                primary="Single-line item"
-                secondary={secondary ? "Secondary text" : null}
-              />
-              <ListItemIcon>
-                <StarBorderPurple500Icon />
-              </ListItemIcon>
-            </ListItem>
-          )}
-        </List>
-      </Demo>
+      <Div>Favourite Page</Div>
+      <List dense={true}>
+        {renderFaveList}
+      </List>
     </>
   );
 };

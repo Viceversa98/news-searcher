@@ -7,6 +7,7 @@ export function NewsCrudContextProvider({ children }) {
   const [news, setNews] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState("");
+  const [favNews, setFavNews] = useState([]);
   // console.log("this is search"+searchTerm);
 
   var url =
@@ -45,6 +46,8 @@ export function NewsCrudContextProvider({ children }) {
     news,
     searchTerm,
     searchResult,
+    favNews,
+    setFavNews,
     retriveNews,
     searchHandler,
   };

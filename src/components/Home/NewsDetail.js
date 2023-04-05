@@ -3,29 +3,37 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, IconButton } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useNewsCrud } from "../../context/NewsCRUDContext";
 
 const NewsDetail = (props) => {
-  const { author, content, description } = props.news;
+  const {favNews,setFavNews} = useNewsCrud();
+  const { author, title, urlToImage } = props.news;
+  
+  const updateMyFavourites = () => {
+   setFavNews(props.news);
+   console.log(favNews);
+  }
   return (
     <Card>
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
+          image={urlToImage}
+          alt="picture"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {author}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {content}
+            {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
+          <IconButton >
+            <FavoriteIcon onClick={() => updateMyFavourites()} />
+          </IconButton>
         </CardContent>
       </CardActionArea>
     </Card>

@@ -17,6 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const HomeIndex = () => {
   const { news, retriveNews } = useNewsCrud();
+
   const renderNewsList = news.map((news) => {
     return (
       <Grid item xs={4}>
@@ -26,8 +27,9 @@ const HomeIndex = () => {
   });
 
   useEffect(() => {
+    console.log("run");
     retriveNews();
-  });
+  }, [retriveNews]);
 
   return (
     <>
