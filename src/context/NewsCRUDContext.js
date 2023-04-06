@@ -8,6 +8,7 @@ export function NewsCrudContextProvider({ children }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState("");
   const [favNews, setFavNews] = useState([]);
+  const LOCAL_STORAGE_KEY = "Favourite";
   // console.log("this is search"+searchTerm);
 
   var url =
@@ -19,14 +20,21 @@ export function NewsCrudContextProvider({ children }) {
 
   //Retrieve News
   const retriveNews = async () => {
+    try {
     const response = await axios.get(url);
     if (response.data.articles) setNews(response.data.articles);
+    }catch (error) {
+      console.log("API error")
+      console.error(error);
+    }
+
   };
 
   //Search Function
 
   const searchHandler = (searchTerm) => {
-    setSearchTerm(searchTerm);
+    try {
+      setSearchTerm(searchTerm);
     setSearchResult(searchTerm);
     if (searchTerm !== "") {
       const newNewsList = news.filter((news) => {
@@ -40,9 +48,14 @@ export function NewsCrudContextProvider({ children }) {
       console.log(news);
       setSearchResult(news);
     }
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   const value = {
+    LOCAL_STORAGE_KEY,
     news,
     searchTerm,
     searchResult,

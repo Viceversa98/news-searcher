@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderOutlined";
 import { styled } from "@mui/material/styles";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
@@ -12,8 +12,22 @@ const Div = styled("div")(({ theme }) => ({
 
 
 const FavouritePage = () => {
-  const fromdb =['apple', 'banana', 'orange'];
-  const renderFaveList = fromdb.map((fave) => {
+  const {news,LOCAL_STORAGE_KEY,favNews,setFavNews} = useNewsCrud();
+  
+  useEffect(()=>{
+    const retriveNews = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (retriveNews) {
+      setFavNews(retriveNews);
+    }
+  })
+
+  useEffect(() => {
+    if (news.length)
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(news));
+  });
+
+  const renderFaveList = favNews.map((fave) => {
+   
     return (
       <ListItem>
         <ListItemText primary={fave} key={fave}/> <StarBorderPurple500Icon/>
@@ -26,7 +40,7 @@ const FavouritePage = () => {
     <>
       <Div>Favourite Page</Div>
       <List dense={true}>
-        {renderFaveList}
+      {favNews.length ? {renderFaveList}: <h2>No data</h2>}
       </List>
     </>
   );

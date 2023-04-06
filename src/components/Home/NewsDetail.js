@@ -6,14 +6,16 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
+import { v4 as uuid } from "uuid";
 
 const NewsDetail = (props) => {
   const {favNews,setFavNews} = useNewsCrud();
-  const { author, title, urlToImage } = props.news;
-  
+  const { author, title, urlToImage,LOCAL_STORAGE_KEY } = props.news;
+ 
   const updateMyFavourites = () => {
-   setFavNews(props.news);
+   setFavNews([...favNews,{id:uuid(), ...props.news}]);
    console.log(favNews);
+   localStorage.setItem(LOCAL_STORAGE_KEY,JSON.stringify(favNews))
   }
   return (
     <Card>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import FavouritePage from "./FavouritePage";
 import Grid from "@mui/material/Grid"; // 1 grid column has 12 xs
 import { styled } from "@mui/material/styles";
@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const HomeIndex = () => {
-  const { news, retriveNews } = useNewsCrud();
+  const { news } = useNewsCrud();
 
   const renderNewsList = news.map((news) => {
     return (
@@ -26,10 +26,6 @@ const HomeIndex = () => {
     );
   });
 
-  useEffect(() => {
-    console.log("run");
-    retriveNews();
-  }, [retriveNews]);
 
   return (
     <>
@@ -41,7 +37,7 @@ const HomeIndex = () => {
         </Grid>
         <Grid item xs={8} container>
           <Grid container columns={{ xs: 10 }}>
-            <Item>{renderNewsList}</Item>
+            <Item>{news.length ?{renderNewsList} : <h1>Search Data</h1>}</Item>
           </Grid>
         </Grid>
       </Grid>

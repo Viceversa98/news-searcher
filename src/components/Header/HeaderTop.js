@@ -9,12 +9,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
 const HeaderTop = () => {
-  const { searchHandler } = useNewsCrud();
+  const { searchHandler,retriveNews,LOCAL_STORAGE_KEY } = useNewsCrud();
   const [searchValue, setSearhValue] = useState("");
 
   const onUserSearch = (e) => {
-    console.log(e.target.value);
-    searchHandler(e.target.value);
+    try {
+      console.log(e.target.value);
+      searchHandler(e.target.value);
+      retriveNews();
+      console.log(LOCAL_STORAGE_KEY);
+    } catch (error) {
+      console.log(error)
+    }
+   
   };
 
   return (
