@@ -1,5 +1,5 @@
-import React from "react";
-import FavouritePage from "./FavouritePage";
+import React, {  } from "react";
+import FavouriteList from "./FavouriteList";
 import Grid from "@mui/material/Grid"; // 1 grid column has 12 xs
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -16,9 +16,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const HomeIndex = () => {
-  const { news } = useNewsCrud();
-
-  const renderNewsList = news.map((news) => {
+  const { news, testnews } = useNewsCrud();
+  
+  const renderNewsList = testnews.map((news) => {
     return (
       <Grid item xs={4}>
         <NewsDetail news={news} key={news} />
@@ -27,17 +27,18 @@ const HomeIndex = () => {
   });
 
 
+
   return (
     <>
       <Grid container spacing={2} item direction={"row"}>
         <Grid item xs={4}>
           <Item>
-            <FavouritePage />
+            <FavouriteList />
           </Item>
         </Grid>
         <Grid item xs={8} container>
           <Grid container columns={{ xs: 10 }}>
-            <Item>{news.length ?{renderNewsList} : <h1>Search Data</h1>}</Item>
+            <Item>{renderNewsList}</Item>
           </Grid>
         </Grid>
       </Grid>

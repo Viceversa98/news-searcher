@@ -11,26 +11,12 @@ const Div = styled("div")(({ theme }) => ({
 
 
 
-const FavouritePage = () => {
-  const {news,LOCAL_STORAGE_KEY,favNews,setFavNews} = useNewsCrud();
-  
-  useEffect(()=>{
-    const retriveNews = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (retriveNews) {
-      setFavNews(retriveNews);
-    }
-  })
-
-  useEffect(() => {
-    if (news.length)
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(news));
-  });
-
+const FavouriteList = () => {
+  const {favNews} = useNewsCrud();
   const renderFaveList = favNews.map((fave) => {
-   
     return (
       <ListItem>
-        <ListItemText primary={fave} key={fave}/> <StarBorderPurple500Icon/>
+        <ListItemText  primary={<b>{fave.author}</b>}  secondary={fave.title} key={fave.id}/> <StarBorderPurple500Icon/>
       </ListItem>
     );
   });
@@ -40,10 +26,10 @@ const FavouritePage = () => {
     <>
       <Div>Favourite Page</Div>
       <List dense={true}>
-      {favNews.length ? {renderFaveList}: <h2>No data</h2>}
+       {(favNews.length) ? renderFaveList : <h2>No Data</h2>}
       </List>
     </>
   );
 };
 
-export default FavouritePage;
+export default FavouriteList;

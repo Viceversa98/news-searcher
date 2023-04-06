@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -9,20 +9,24 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
 const HeaderTop = () => {
-  const { searchHandler,retriveNews,LOCAL_STORAGE_KEY } = useNewsCrud();
+  const { searchHandler ,retriveNews} = useNewsCrud();
   const [searchValue, setSearhValue] = useState("");
 
   const onUserSearch = (e) => {
     try {
-      console.log(e.target.value);
+     
       searchHandler(e.target.value);
-      retriveNews();
-      console.log(LOCAL_STORAGE_KEY);
+      
     } catch (error) {
       console.log(error)
     }
    
   };
+
+  useEffect(()=>{
+    console.log("change happen")
+    retriveNews();
+  },[ searchValue])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
