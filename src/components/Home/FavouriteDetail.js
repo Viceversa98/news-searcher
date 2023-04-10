@@ -1,16 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderOutlined";
-import { styled } from "@mui/material/styles";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
-import { List, ListItem, ListItemText } from "@mui/material";
-const Div = styled("div")(({ theme }) => ({
-  ...theme.typography.button,
-  backgroundColor: theme.palette.background.paper,
-  padding: theme.spacing(0),
-}));
+import { IconButton, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
 
-const FavouriteDetail =()=>{
+const FavouriteDetail = (props) => {
+  const deleteFave = () => {
+    console.log(id);
+    removeFave(id);
+    localStorage.removeItem(props.fave);
+    console.log("the id is" + id + " deleted");
+  };
 
-}
+  const { removeFave } = useNewsCrud();
+  const { id, author, url, title } = props.fave;
+  return (
+    <>
+      <Link to={url}>
+        <ListItemText primary={<b>{title}</b>} secondary={author} />
+      </Link>
+      <IconButton key={id} onClick={deleteFave}>
+        <StarBorderPurple500Icon />
+      </IconButton>
+    </>
+  );
+};
 
 export default FavouriteDetail;

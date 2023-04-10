@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -8,25 +8,26 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import { useNewsCrud } from "../../context/NewsCRUDContext";
-const HeaderTop = () => {
-  const { searchHandler ,retriveNews} = useNewsCrud();
+import { useNavigate } from "react-router-dom";
+function HeaderTop() {
+  const { retriveNews,setIsLoggedIn,LOCAL_STORAGE_KEY_AUTH } = useNewsCrud();
   const [searchValue, setSearhValue] = useState("");
-
-  const onUserSearch = (e) => {
+  let navigate = useNavigate();
+  const onUserSearch = async (e) => {
     try {
-     
-      searchHandler(e.target.value);
-      
+      const makeSearch = await retriveNews(e.target.value);
+      console.log(makeSearch);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-   
   };
 
-  useEffect(()=>{
-    console.log("change happen")
-    retriveNews();
-  },[ searchValue])
+  const logOut = () =>{
+    setIsLoggedIn(false)
+    localStorage.setItem(LOCAL_STORAGE_KEY_AUTH, false);
+   let path = `/login`;
+   navigate(path);
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -59,7 +60,7 @@ const HeaderTop = () => {
           >
             Search
           </Button>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={logOut}>Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

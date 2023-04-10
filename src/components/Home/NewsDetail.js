@@ -9,25 +9,19 @@ import { useNewsCrud } from "../../context/NewsCRUDContext";
 import { v4 as uuid } from "uuid";
 
 const NewsDetail = (props) => {
-  const { favNews, setFavNews } = useNewsCrud();
-  const { author, title, urlToImage } = props.news;
-  const LOCAL_STORAGE_KEY = "Favourite";
+  const { favNews, setFavNews, LOCAL_STORAGE_KEY } = useNewsCrud();
 
-  const updateMyFavourites = () => {
-    setFavNews([...favNews, { id: uuid(), ...props.news }]);
+  const { author, title, urlToImage } = props.new;
+
+  const updateMyFavourites = async () => {
+    setFavNews([...favNews, { id: uuid(), ...props.new }]);
     if (favNews.length) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(favNews));
     }
   };
 
-  useEffect(() => {
-    const getAllFav = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (getAllFav) {
-      setFavNews(getAllFav);
-    }
-  }, []);
   return (
-    <Card>
+    <Card key={favNews.id}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -42,8 +36,8 @@ const NewsDetail = (props) => {
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>
-          <IconButton>
-            <FavoriteIcon onClick={() => updateMyFavourites()} />
+          <IconButton onClick={() => updateMyFavourites()}>
+            <FavoriteIcon />
           </IconButton>
         </CardContent>
       </CardActionArea>

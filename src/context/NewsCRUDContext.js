@@ -1,63 +1,125 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const newsCrudContext = createContext();
 
 export function NewsCrudContextProvider({ children }) {
-  const [news, setNews] = useState([]);
-  const [testnews, setTestNews] = useState([]);
-  const [searchTerms, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState("");
-  const [favNews, setFavNews] = useState([]);
-  const LOCAL_KEY_2nd = "Jombeli";
+  const [news, setNews] = useState([]); // store news that is search
+  const [testnews, setTestNews] = useState([]); // test data to be stored in
+  const [favNews, setFavNews] = useState([]); // to store favourite list
+  const [userName, setUserName] = useState([]);
+  const LOCAL_KEY_2nd = "Jombeli"; //Test data if no api can be catch
+  const LOCAL_STORAGE_KEY = "Favourite";
+  const LOCAL_STORAGE_KEY_AUTH = "isLoggedIn";
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_AUTH))
+  );
+  const LOCAL_STORAGE_KEY_USER = "userName";
+  let navigate = useNavigate();
+
+  //useEffect for test data if cannot connect api
   useEffect(() => {
-    console.log(LOCAL_KEY_2nd);
     const getAllTest = JSON.parse(localStorage.getItem(LOCAL_KEY_2nd));
     setTestNews(getAllTest);
-  },[]);
+  }, []);
 
-  // console.log("this is search"+searchTerm);
-  var url =
-    "https://newsapi.org/v2/everything?" +
-    `q=${searchResult}&` +
-    "from=2023-04-03&" +
-    "sortBy=popularity&" +
-    "apiKey=14491607f8474e05acad3e1aec5278d2";
-  //Search Function
+  //one time run to get Favourite List from Local Storage
+  useEffect(() => {
+    const getAllContacts = async () => {
+      const getAllFav = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+      if (getAllFav) {
+        setFavNews(getAllFav);
+      }
+    };
+    getAllContacts();
+  }, []);
 
-  const searchHandler = (searchTerm) => {
-    try {
-      setSearchResult(searchTerm);
-      setSearchTerm(searchTerm);
-    } catch (error) {
-      console.log(error);
+  // for auth if refresh page
+  useEffect(() => {
+    const checkLog = async () => {
+      setIsLoggedIn(localStorage.getItem(LOCAL_STORAGE_KEY_AUTH));
+      if (localStorage.getItem(LOCAL_STORAGE_KEY_AUTH)) {
+        if (JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_AUTH)) === true) {
+          console.log(isLoggedIn);
+          navigate("/home");
+        } else {
+          console.log(isLoggedIn);
+          navigate("/login");
+        }
+      }
+    };
+    checkLog();
+  }, [isLoggedIn, navigate]);
+
+  // check if auth exist or not
+  useEffect(() => {
+    if (
+      localStorage.getItem(LOCAL_STORAGE_KEY_AUTH) === null ||
+      localStorage.getItem(LOCAL_STORAGE_KEY_AUTH) === undefined
+    ) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_AUTH, false);
+      setIsLoggedIn(false);
+      navigate("/login");
     }
-  };
+  }, [navigate]);
 
-  //Retrieve News
+  //create user localstorage
+  useEffect(() => {
+    localStorage.removeItem("userName");
+    const startLocalstore = async () => {
+      setUserName({ name: "Alif" });
+    };
+    startLocalstore();
 
-  const retriveNews = async () => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_USER,
+      JSON.stringify({ name: "Alif" })
+    );
+  }, []);
+
+  //Retrieve News API
+  const retriveNews = async (getSearch) => {
+    var url =
+      "https://newsapi.org/v2/everything?" +
+      `q=${getSearch}&` +
+      "searchIn=title&" +
+      "pageSize=28&" +
+      "page=1&" +
+      "apiKey=14491607f8474e05acad3e1aec5278d2";
     try {
-      console.log(url);
+      setNews([]); //empty it if searh for new news
       const response = await axios.get(url);
       if (response.data.articles) setNews(response.data.articles);
+      return "data is send";
     } catch (error) {
       console.log("API error");
       console.error(error);
     }
   };
 
+  const removeFave = async (id) => {
+    const newFaveList = favNews.filter((favenews) => {
+      return favenews.id !== id;
+    });
+    console.log(newFaveList);
+    setFavNews(newFaveList);
+  };
+
   const value = {
+    LOCAL_STORAGE_KEY,
+    LOCAL_STORAGE_KEY_AUTH,
+    LOCAL_STORAGE_KEY_USER,
+    userName,
     news,
-    searchTerms,
-    searchResult,
     favNews,
     LOCAL_KEY_2nd, // if api cannot catch
     testnews, // test
+    isLoggedIn,
+    setIsLoggedIn,
     setTestNews, //test
     setFavNews,
-    searchHandler,
     retriveNews,
+    removeFave,
   };
 
   return (
