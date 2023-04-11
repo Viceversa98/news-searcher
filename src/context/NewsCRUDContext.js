@@ -5,23 +5,17 @@ const newsCrudContext = createContext();
 
 export function NewsCrudContextProvider({ children }) {
   const [news, setNews] = useState([]); // store news that is search
-  const [testnews, setTestNews] = useState([]); // test data to be stored in
   const [favNews, setFavNews] = useState([]); // to store favourite list
-  const [userName, setUserName] = useState([]);
-  const LOCAL_KEY_2nd = "Jombeli"; //Test data if no api can be catch
-  const LOCAL_STORAGE_KEY = "Favourite";
-  const LOCAL_STORAGE_KEY_AUTH = "isLoggedIn";
+  const [userName, setUserName] = useState(""); //for header name
+  const [pageSize, setPageSize] = useState(10); //for header name
+  const [pageNo, setpageNo] = useState(1); //for header name
+  const LOCAL_STORAGE_KEY = "Favourite"; // save favorite list
+  const LOCAL_STORAGE_KEY_AUTH = "isLoggedIn"; // boolean login
   const [isLoggedIn, setIsLoggedIn] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_AUTH))
   );
   const LOCAL_STORAGE_KEY_USER = "userName";
   let navigate = useNavigate();
-
-  //useEffect for test data if cannot connect api
-  useEffect(() => {
-    const getAllTest = JSON.parse(localStorage.getItem(LOCAL_KEY_2nd));
-    setTestNews(getAllTest);
-  }, []);
 
   //one time run to get Favourite List from Local Storage
   useEffect(() => {
@@ -83,9 +77,9 @@ export function NewsCrudContextProvider({ children }) {
       "https://newsapi.org/v2/everything?" +
       `q=${getSearch}&` +
       "searchIn=title&" +
-      "pageSize=28&" +
-      "page=1&" +
-      "apiKey=14491607f8474e05acad3e1aec5278d2";
+      `pageSize=${pageSize}&` + // page size will increase on click
+      `page=$${pageNo}&` + //page number
+      "apiKey=14491607f8474e05acad3e1aec5278d2"; //my api key
     try {
       setNews([]); //empty it if searh for new news
       const response = await axios.get(url);
@@ -112,11 +106,8 @@ export function NewsCrudContextProvider({ children }) {
     userName,
     news,
     favNews,
-    LOCAL_KEY_2nd, // if api cannot catch
-    testnews, // test
     isLoggedIn,
     setIsLoggedIn,
-    setTestNews, //test
     setFavNews,
     retriveNews,
     removeFave,

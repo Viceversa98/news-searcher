@@ -11,41 +11,47 @@ const HomeIndex = () => {
   console.log(news);
   const renderNewsList = news.map((news) => {
     return (
-      <Grid item xs={4}>
+      <Grid item xs={4} padding={1}>
         <NewsDetail new={news} key={news.url} />
       </Grid>
     );
   });
 
   return (
-    <>
-      <Paper
-        sx={{
-          p: 3,
-          maxWidth: "90%",
-          flexGrow: 1,
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-        }}
-      >
+    <Grid
+      container
+      item
+      direction={"row"}
+      
+    >
+      <Grid item xs={12}>
         <HeaderTop />
         <br></br>
         <br></br>
         <br></br>
         <br></br>
+        <br></br>
+        <br></br>
+      </Grid>
 
-        <Grid container item spacing={2} padding={2} direction={"row"}>
-          <Grid item xs={4}>
-            <Paper>
-              <FavouriteList />
-            </Paper>
-          </Grid>
-          <Grid item xs={8} container spacing={2} >
-            {news.length ? renderNewsList : <h2>Search Data</h2>}
-          </Grid>
-        </Grid>
-      </Paper>
-    </>
+      <Grid item xs={4}>
+        <Paper
+          container
+          elevation={3}
+          sx={{
+            opacity: 0.8,
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+          }}
+        >
+          <FavouriteList />
+        </Paper>
+      </Grid>
+
+      <Grid item xs={8} container paddingLeft={2}>
+        {news.length ? renderNewsList : <h2>Search Data</h2>}
+      </Grid>
+    </Grid>
   );
 };
 

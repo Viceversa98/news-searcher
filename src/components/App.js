@@ -2,6 +2,7 @@ import "./App.css";
 import React from "react";
 import Grid from "@mui/material/Grid"; // 1 grid column has 12 xs
 import { NewsCrudContextProvider } from "../context/NewsCRUDContext";
+import bgImg from "../images/background.jpg";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +15,14 @@ function App() {
 
   return (
     <Router>
-      <Grid container direction={"column"}>
+      <Grid  container direction={"column"} sx={{
+        backgroundImage: `url(${bgImg})`,
+        position: "absolute",
+        backgroundSize: "100% 100%",
+        backgroundPosition: "center center",
+        minWidth: "100%",
+        minheight: "100%",
+      }}>
         <NewsCrudContextProvider>
       
           <Routes>
