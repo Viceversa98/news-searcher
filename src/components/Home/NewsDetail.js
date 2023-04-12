@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,15 +9,12 @@ import { useNewsCrud } from "../../context/NewsCRUDContext";
 import { v4 as uuid } from "uuid";
 
 const NewsDetail = (props) => {
-  const { favNews, setFavNews, LOCAL_STORAGE_KEY } = useNewsCrud();
+  const { favNews, setFavNews } = useNewsCrud();
 
   const { author, title, urlToImage } = props.new;
 
   const updateMyFavourites = async () => {
     setFavNews([...favNews, { id: uuid(), ...props.new }]);
-    if (favNews.length) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(favNews));
-    }
   };
 
   return (

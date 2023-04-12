@@ -5,10 +5,10 @@ import { IconButton, ListItemText } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const FavouriteDetail = (props) => {
-  const deleteFave = () => {
+  const deleteFave = async () => {
     console.log(id);
     removeFave(id);
-    localStorage.removeItem(props.fave);
+    console.log(props);
     console.log("the id is" + id + " deleted");
   };
 

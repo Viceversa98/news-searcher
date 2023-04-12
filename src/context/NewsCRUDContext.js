@@ -97,8 +97,16 @@ export function NewsCrudContextProvider({ children }) {
     });
     console.log(newFaveList);
     setFavNews(newFaveList);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newFaveList));
   };
-
+  
+  //check if favNews has any changes
+  useEffect(() => {
+    if (favNews) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(favNews));
+    } 
+  }, [favNews]);
+  
   const value = {
     LOCAL_STORAGE_KEY,
     LOCAL_STORAGE_KEY_AUTH,

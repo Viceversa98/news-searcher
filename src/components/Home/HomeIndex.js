@@ -18,12 +18,7 @@ const HomeIndex = () => {
   });
 
   return (
-    <Grid
-      container
-      item
-      direction={"row"}
-      
-    >
+    <Grid container item direction={"row"}>
       <Grid item xs={12}>
         <HeaderTop />
         <br></br>
