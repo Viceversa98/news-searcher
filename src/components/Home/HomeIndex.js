@@ -7,9 +7,11 @@ import NewsDetail from "./NewsDetail";
 import HeaderTop from "../Header/HeaderTop";
 import ExpandCircleDownTwoToneIcon from "@mui/icons-material/ExpandCircleDownTwoTone";
 import Typography from "@mui/material/Typography";
-import {IconButton} from "@mui/material"
+import { IconButton } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 const HomeIndex = () => {
-  const { news,retriveLoadMoreNews,pageSize,retriveNews } = useNewsCrud();
+  const { news, retriveLoadMoreNews, pageSize, pageNo ,retrivePageNews} = useNewsCrud();
   console.log(news);
   const renderNewsList = news.map((news) => {
     return (
@@ -20,10 +22,16 @@ const HomeIndex = () => {
   });
 
   // to load data
-  const loadMore = ()=>{
-    retriveLoadMoreNews(pageSize+10)
-    console.log(pageSize);  
-  }
+  const loadMore = () => {
+    retriveLoadMoreNews(pageSize + 10);
+    console.log(pageSize);
+  };
+
+  // for page handling
+  const pageHandler = (value) => {
+    retrivePageNews(value);
+    console.log(value);
+  };
 
   return (
     <Grid container item direction={"row"}>
@@ -54,8 +62,27 @@ const HomeIndex = () => {
       <Grid item xs={8} container paddingLeft={2}>
         {news.length ? renderNewsList : <h2>&nbsp;</h2>}
         {news.length ? (
-          <Grid item xs={12} textAlign={"center"} >
+          <Grid item xs={12} textAlign={"center"}>
             <IconButton onClick={loadMore}>
+              <Paper
+                container
+                elevation={3}
+                sx={{
+                  opacity: 0.8,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+                }}
+              >
+                <Typography align="inherit">Load More</Typography>
+                <ExpandCircleDownTwoToneIcon />
+              </Paper>
+            </IconButton>
+          </Grid>
+        ) : (
+          <h2>&nbsp;</h2>
+        )}
+        {news.length ? (
+          <Grid item xs={12} textAlign={"center"}>
             <Paper
               container
               elevation={3}
@@ -65,10 +92,10 @@ const HomeIndex = () => {
                   theme.palette.mode === "dark" ? "#1A2027" : "#fff",
               }}
             >
-              <Typography align="inherit">Load More</Typography>
-              <ExpandCircleDownTwoToneIcon />
+              <Stack spacing={2}>
+                <Pagination count={10} color="primary" page={pageNo} onChange={pageHandler}/>
+              </Stack>
             </Paper>
-            </IconButton>
           </Grid>
         ) : (
           <h2>&nbsp;</h2>

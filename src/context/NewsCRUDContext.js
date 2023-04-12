@@ -115,7 +115,28 @@ export function NewsCrudContextProvider({ children }) {
     }
   };
 
+  //Retrieve News API for page number
+  const retrivePageNews = async (pageNumber) => {
+    var url =
+      "https://newsapi.org/v2/everything?" +
+      `q=${searchValue}&` +
+      "searchIn=title&" +
+      `pageSize=${pageSize}&` + // page size will increase on click
+      `page=$${pageNumber}&` + //page number
+      "apiKey=14491607f8474e05acad3e1aec5278d2"; //my api key
+    try {
+      setpageNo(pageNumber);
+      setNews([]); //empty it if searh for new news
+      const response = await axios.get(url);
+      if (response.data.articles) setNews(response.data.articles);
+      return "data is send";
+    } catch (error) {
+      console.log("API error");
+      console.error(error);
+    }
+  };
 
+  // remove specific fave list
   const removeFave = async (id) => {
     const newFaveList = favNews.filter((favenews) => {
       return favenews.id !== id;
@@ -141,12 +162,14 @@ export function NewsCrudContextProvider({ children }) {
     favNews,
     isLoggedIn,
     pageSize,
+    pageNo,
     setIsLoggedIn,
     setFavNews,
     retriveNews,
     removeFave,
     setPageSize,
-    retriveLoadMoreNews
+    retriveLoadMoreNews,
+    retrivePageNews
   };
 
   return (
