@@ -9,6 +9,7 @@ export function NewsCrudContextProvider({ children }) {
   const [userName, setUserName] = useState(""); //for header name
   const [pageSize, setPageSize] = useState(10); //for header name
   const [pageNo, setpageNo] = useState(1); //for header name
+  const [searchValue, setsearchValue] = useState(""); 
   const LOCAL_STORAGE_KEY = "Favourite"; // save favorite list
   const LOCAL_STORAGE_KEY_AUTH = "isLoggedIn"; // boolean login
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -81,6 +82,8 @@ export function NewsCrudContextProvider({ children }) {
       `page=$${pageNo}&` + //page number
       "apiKey=14491607f8474e05acad3e1aec5278d2"; //my api key
     try {
+      setsearchValue(getSearch)
+      setPageSize(10); // change back to default pageSize
       setNews([]); //empty it if searh for new news
       const response = await axios.get(url);
       if (response.data.articles) setNews(response.data.articles);
@@ -90,6 +93,28 @@ export function NewsCrudContextProvider({ children }) {
       console.error(error);
     }
   };
+
+   //Retrieve News API for LOAD MORE
+   const retriveLoadMoreNews = async (loadSize) => {
+    var url =
+      "https://newsapi.org/v2/everything?" +
+      `q=${searchValue}&` +
+      "searchIn=title&" +
+      `pageSize=${loadSize}&` + // page size will increase on click
+      `page=$${pageNo}&` + //page number
+      "apiKey=14491607f8474e05acad3e1aec5278d2"; //my api key
+    try {
+      setPageSize(loadSize);
+      setNews([]); //empty it if searh for new news
+      const response = await axios.get(url);
+      if (response.data.articles) setNews(response.data.articles);
+      return "data is send";
+    } catch (error) {
+      console.log("API error");
+      console.error(error);
+    }
+  };
+
 
   const removeFave = async (id) => {
     const newFaveList = favNews.filter((favenews) => {
@@ -106,7 +131,7 @@ export function NewsCrudContextProvider({ children }) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(favNews));
     } 
   }, [favNews]);
-  
+
   const value = {
     LOCAL_STORAGE_KEY,
     LOCAL_STORAGE_KEY_AUTH,
@@ -115,10 +140,13 @@ export function NewsCrudContextProvider({ children }) {
     news,
     favNews,
     isLoggedIn,
+    pageSize,
     setIsLoggedIn,
     setFavNews,
     retriveNews,
     removeFave,
+    setPageSize,
+    retriveLoadMoreNews
   };
 
   return (

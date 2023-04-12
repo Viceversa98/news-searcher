@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 const NewsDetail = (props) => {
   const { favNews, setFavNews } = useNewsCrud();
 
-  const { author, title, urlToImage } = props.new;
+  const { author, title, urlToImage, url } = props.new;
 
   const updateMyFavourites = async () => {
     setFavNews([...favNews, { id: uuid(), ...props.new }]);
@@ -19,7 +19,7 @@ const NewsDetail = (props) => {
 
   return (
     <Card key={favNews.id}>
-      <CardActionArea>
+      <CardActionArea href={url}>
         <CardMedia
           component="img"
           height="140"
@@ -33,11 +33,11 @@ const NewsDetail = (props) => {
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>
-          <IconButton onClick={() => updateMyFavourites()}>
-            <FavoriteIcon />
-          </IconButton>
         </CardContent>
       </CardActionArea>
+      <IconButton onClick={() => updateMyFavourites()}>
+        <FavoriteIcon />
+      </IconButton>
     </Card>
   );
 };
